@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/report-transactions")
 public class ReportTransactionController {
 
 	@Autowired
@@ -41,9 +41,12 @@ public class ReportTransactionController {
 				.body(reportClientService.buscarSaldoPromedioMes(idClient)));
 	}
 
-	@GetMapping("/products/{idCuenta}/commissions/{ra}/rango/{rb}")
-	public Mono<ResponseEntity<Flux<Transaction>>> getComisionPorPorducto(@PathVariable String idCuenta,
+	@GetMapping("/products/{idClient}/commissions/{ra}/rango/{rb}")
+	public Mono<ResponseEntity<Flux<DtoReportClient1>>> getComisionPorPorducto(@PathVariable String idClient,
 			@PathVariable String ra, @PathVariable String rb) {
-		return null;
+	  LocalDate start = LocalDate.parse(ra);
+    LocalDate end = LocalDate.parse(rb);
+    return Mono.just(ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+        .body(reportClientService.totalComisionPorProducto(idClient,start,end)));
 	}
 }
