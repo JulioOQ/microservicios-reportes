@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux;
 
 public interface ReportTransactionService {
 
-  public Flux<Transaction> buscarRangoDeFecha(LocalDate a, LocalDate b);  
+	public Flux<Transaction> buscarRangoDeFecha(LocalDate a, LocalDate b);
 }

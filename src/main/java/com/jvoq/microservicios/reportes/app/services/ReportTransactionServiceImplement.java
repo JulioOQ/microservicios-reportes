@@ -11,18 +11,13 @@ import com.jvoq.microservicios.reportes.app.models.repository.ReportTransactionR
 import reactor.core.publisher.Flux;
 
 @Service
-public class ReportTransactionServiceImplement implements ReportTransactionService{
-  
-  @Autowired
-  private ReportTransactionRepository reportTransactionRepository;
+public class ReportTransactionServiceImplement implements ReportTransactionService {
 
-  @Override
-  public Flux<Transaction> buscarRangoDeFecha(LocalDate a, LocalDate b) {
-    // TODO Auto-generated method stub
-    return reportTransactionRepository.findByFechaBetween(a, b);
-  }
+	@Autowired
+	private ReportTransactionRepository reportTransactionRepository;
 
-
-
-
+	@Override
+	public Flux<Transaction> buscarRangoDeFecha(LocalDate a, LocalDate b) {
+		return reportTransactionRepository.findByFechaBetween(a, b);
+	}
 }

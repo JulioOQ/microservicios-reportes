@@ -15,58 +15,49 @@ import reactor.core.publisher.Flux;
 @Service
 public class ReportClientServiceImplement implements ReportClientService {
 
-  @Autowired
-  private MicroOperationClientFeign microOperationClientFeign;
-  @Autowired
-  private MicroUserClientFeign microUserClientFeign;
- 
-  
+	@Autowired
+	private MicroOperationClientFeign microOperationClientFeign;
+	@Autowired
+	private MicroUserClientFeign microUserClientFeign;
 
-  @Override
-  public Flux<DtoReportClient1> buscarSaldoPromedioMes(String idCliente) {
-    DtoReportClient1 dtoReportClient1s = new DtoReportClient1();
-    List<Account> accounts = new ArrayList<>();
-    List<Credit> credits = new ArrayList<>();
+	@Override
+	public Flux<DtoReportClient1> buscarSaldoPromedioMes(String idCliente) {
+		DtoReportClient1 dtoReportClient1s = new DtoReportClient1();
+		List<Account> accounts = new ArrayList<>();
+		List<Credit> credits = new ArrayList<>();
 
-    try {
-      microUserClientFeign.findClientById(idCliente).subscribe(c -> dtoReportClient1s.setCliente(c.getNombres()));
+		try {
+			microUserClientFeign.findClientById(idCliente).subscribe(c -> dtoReportClient1s.setCliente(c.getNombres()));
 
-      microOperationClientFeign.getAccountByIdClient(idCliente).collectList().subscribe(accounts::addAll);
-      microOperationClientFeign.getCreditByIdClient(idCliente).collectList().subscribe(credits::addAll);
-      Thread.sleep(1000);
-      dtoReportClient1s.setCuentas(accounts);
-      dtoReportClient1s.setCreditos(credits);
+			microOperationClientFeign.getAccountByIdClient(idCliente).collectList().subscribe(accounts::addAll);
+			microOperationClientFeign.getCreditByIdClient(idCliente).collectList().subscribe(credits::addAll);
+			Thread.sleep(1000);
+			dtoReportClient1s.setCuentas(accounts);
+			dtoReportClient1s.setCreditos(credits);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return Flux.just(dtoReportClient1s);
+	}
 
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-    }
+	@Override
+	public Flux<DtoReportClient1> totalComisionPorProducto(String idCliente, LocalDate start, LocalDate end) {
+		DtoReportClient1 dtoReportClient1s = new DtoReportClient1();
+		List<Account> accounts = new ArrayList<>();
+		List<Credit> credits = new ArrayList<>();
 
-    return Flux.just(dtoReportClient1s);
+		try {
+			microUserClientFeign.findClientById(idCliente).subscribe(c -> dtoReportClient1s.setCliente(c.getNombres()));
 
-  }
-
-  @Override
-  public Flux<DtoReportClient1> totalComisionPorProducto(String idCliente, LocalDate start, LocalDate end) {
-    DtoReportClient1 dtoReportClient1s = new DtoReportClient1();
-    List<Account> accounts = new ArrayList<>();
-    List<Credit> credits = new ArrayList<>();
-
-    try {
-      microUserClientFeign.findClientById(idCliente).subscribe(c -> dtoReportClient1s.setCliente(c.getNombres()));
-
-      microOperationClientFeign.getAccountByIdClient(idCliente).collectList().subscribe(accounts::addAll);
-      microOperationClientFeign.getCreditByIdClient(idCliente).collectList().subscribe(credits::addAll);
-      Thread.sleep(1000);
-      accounts.get(0);
-      dtoReportClient1s.setCuentas(accounts);
-      dtoReportClient1s.setCreditos(credits);
-
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-    }
-
-    return Flux.just(dtoReportClient1s);
-   
-  }
-
+			microOperationClientFeign.getAccountByIdClient(idCliente).collectList().subscribe(accounts::addAll);
+			microOperationClientFeign.getCreditByIdClient(idCliente).collectList().subscribe(credits::addAll);
+			Thread.sleep(1000);
+			accounts.get(0);
+			dtoReportClient1s.setCuentas(accounts);
+			dtoReportClient1s.setCreditos(credits);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return Flux.just(dtoReportClient1s);
+	}
 }
